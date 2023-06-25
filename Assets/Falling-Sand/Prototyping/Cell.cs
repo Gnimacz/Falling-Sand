@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public enum CellState
 {
@@ -18,6 +19,7 @@ public struct CellProperties
     public List<Cell> cellNeighbors;
     public bool updated;
     public bool shouldUpdate;
+    public int cellID;
 }
 //a class to hold the minimum amount of data needed to define a cell
 [System.Serializable]
@@ -84,14 +86,13 @@ public class Cell
         // if (!cellProperties.shouldUpdate) return grid;
         if (cellProperties.updated) return grid;
         // if (!cellProperties.canCellMove) return grid;
-        if (cellProperties.cellNeighbors.Count == 0) GetCellNeighbors(grid);
+        GetCellNeighbors(grid);
         //if the cell below is empty, move down
         for (int i = 0; i < cellProperties.cellNeighbors.Count; i++)
         {
             if (cellProperties.cellNeighbors[i].cellProperties.cellPosition.y > cellProperties.cellPosition.y) continue;
             if (cellProperties.cellNeighbors[i].cellProperties.cellState == CellState.Empty)
             {
-                Debug.Log("moving down");
                 Cell oldCell = this;
                 Cell oldNeighborCell = cellProperties.cellNeighbors[i];
 
@@ -101,7 +102,7 @@ public class Cell
                 //check each of the neighboring cells, if it's empty, move there
                 grid[cellProperties.cellNeighbors[i].cellProperties.cellPosition.x, cellProperties.cellNeighbors[i].cellProperties.cellPosition.y] = this;
                 cellProperties.cellPosition = cellProperties.cellNeighbors[i].cellProperties.cellPosition;
-                cellProperties.cellColor = Color.yellow;
+                // cellProperties.cellColor = Color.yellow;
 
                 oldNeighborCell.cellProperties.cellPosition = oldCellPos;
                 grid[oldCellPos.x, oldCellPos.y] = oldNeighborCell;
@@ -138,7 +139,7 @@ public class Cell
         int y = cellProperties.cellPosition.y;
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
-        int randomIndex = Random.Range(0, cellProperties.cellNeighbors.Count);
+        int randomIndex = UnityEngine.Random.Range(0, cellProperties.cellNeighbors.Count);
 
         if (y > 0) //bottom
         {
@@ -153,30 +154,30 @@ public class Cell
             cellProperties.cellNeighbors.Add(grid[x + 1, y - 1]);
         }
 
-        ////top
-        //if(y < height - 1)
-        //{
+        // //top
+        // if(y < height - 1)
+        // {
         //    cellProperties.cellNeighbors.Add(grid[x, y + 1]);
-        //}
-        ////left
-        //if (x > 0)
-        //{
+        // }
+        // //left
+        // if (x > 0)
+        // {
         //    cellProperties.cellNeighbors.Add(grid[x - 1, y]);
-        //}
-        ////right
-        //if (x < width - 1)
-        //{
+        // }
+        // //right
+        // if (x < width - 1)
+        // {
         //    cellProperties.cellNeighbors.Add(grid[x + 1, y]);
-        //}
-        ////top-left
-        //if (x > 0 && y < height - 1)
-        //{
+        // }
+        // //top-left
+        // if (x > 0 && y < height - 1)
+        // {
         //    cellProperties.cellNeighbors.Add(grid[x - 1, y + 1]);
-        //}
-        ////top-right
-        //if (x < width - 1 && y < height - 1)
-        //{
+        // }
+        // //top-right
+        // if (x < width - 1 && y < height - 1)
+        // {
         //    cellProperties.cellNeighbors.Add(grid[x + 1, y + 1]);
-        //}
+        // }
     }
 }

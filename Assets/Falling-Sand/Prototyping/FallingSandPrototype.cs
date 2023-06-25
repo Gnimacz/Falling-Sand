@@ -68,7 +68,7 @@ public class FallingSandPrototype : MonoBehaviour
                 cellGrid[i, j].UpdateCell(cellGrid);
             }
         }
-        
+
         //}
 
         // Sprite oldSprite = GetComponent<SpriteRenderer>().sprite;
@@ -160,6 +160,7 @@ public class FallingSandPrototype : MonoBehaviour
     //raycast from the mouse position and change the pixel at the hit position to black
     void PaintPixelAtMouse(Cell cellToPaint)
     {
+        Cell cellToPlace;
 
         if (RectTransformUtility.RectangleContainsScreenPoint(rectTransform, Input.mousePosition, Camera.main))
         {
@@ -186,8 +187,22 @@ public class FallingSandPrototype : MonoBehaviour
                         if (Vector2.Distance(new Vector2(i, j), localPoint) < paintBrushRadius)
                         {
                             // texture.SetPixel(i, j, colorToPaint);
-                            cellToPaint.cellProperties.cellPosition = new Vector2Int(i, j);
-                            cellGrid[i, j] = cellToPaint;
+                            switch (cellToPaint)
+                            {
+                                case FallingCell:
+                                    cellToPlace = new FallingCell(cellToPaint.cellProperties.cellColor, cellToPaint.cellProperties.cellState, new Vector2Int(i, j), ref cellGrid);
+                                    break;
+                                case EmptyCell:
+                                    cellToPlace = new EmptyCell(cellToPaint.cellProperties.cellColor, cellToPaint.cellProperties.cellState, new Vector2Int(i, j));
+                                    break;
+                                default:
+                                    cellToPlace = new EmptyCell(cellToPaint.cellProperties.cellColor, CellState.Empty, new Vector2Int(i, j));
+                                    break;
+                            }
+                            // cellToPlace = new FallingCell(cellToPaint.cellProperties.cellColor, cellToPaint.cellProperties.cellState, new Vector2Int(i,j), ref cellGrid);
+                            // cellToPlace.cellProperties.cellPosition = new Vector2Int(i, j);
+                            // cellToPlace.cellProperties.cellColor = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f), 1);
+                            cellGrid[i, j] = cellToPlace;
                         }
                     }
                 }
