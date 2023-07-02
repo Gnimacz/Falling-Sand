@@ -130,10 +130,14 @@ public class FallingSandPrototype : MonoBehaviour
         {
             selectedCellType = 3;
         }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            selectedCellType = 4;
+        }
 
         if (Input.GetMouseButton(0))
         {
-            switch(selectedCellType)
+            switch (selectedCellType)
             {
                 case 0:
                     PaintPixelAtMouse(new EmptyCell(Color.white, CellState.Empty, Vector2Int.zero));
@@ -146,6 +150,9 @@ public class FallingSandPrototype : MonoBehaviour
                     break;
                 case 3:
                     PaintPixelAtMouse(new Water(Color.blue, CellState.Liquid, Vector2Int.zero));
+                    break;
+                case 4:
+                    PaintPixelAtMouse(new ImmovableCell(Color.gray, CellState.Solid, Vector2Int.zero));
                     break;
                 default:
                     PaintPixelAtMouse(new EmptyCell(Color.white, CellState.Empty, Vector2Int.zero));
@@ -235,6 +242,9 @@ public class FallingSandPrototype : MonoBehaviour
                                 case Water:
                                     cellToPlace = new Water(cellToPaint.cellProperties.cellColor, cellToPaint.cellProperties.cellState, new Vector2Int(i, j));
                                     break;
+                                case ImmovableCell:
+                                    cellToPlace = new ImmovableCell(cellToPaint.cellProperties.cellColor, cellToPaint.cellProperties.cellState, new Vector2Int(i, j));
+                                    break;
                                 default:
                                     cellToPlace = new EmptyCell(cellToPaint.cellProperties.cellColor, CellState.Empty, new Vector2Int(i, j));
                                     break;
@@ -265,7 +275,8 @@ public class FallingSandPrototype : MonoBehaviour
         return mappedValue;
     }
 
-    void OnGUI() {
+    void OnGUI()
+    {
         //display the selected cell type in the top left corner of the screen
         GUI.Label(new Rect(10, 10, 100, 20), "Selected Cell: " + selectedCellType);
     }
