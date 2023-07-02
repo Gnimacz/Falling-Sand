@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 
 public class FallingSandPrototype : MonoBehaviour
 {
+    int selectedCellType = 0;
     public int paintBrushRadius = 10;
     public Texture2D texture;
     public Vector2Int texSize = new Vector2Int(256, 256);
@@ -22,10 +23,12 @@ public class FallingSandPrototype : MonoBehaviour
     {
         image = GetComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
+
     }
 
     private void Start()
     {
+        Time.timeScale = 0.02f;
         cellGrid = new Cell[texSize.x, texSize.y];
 
         //populate the array with cells
@@ -57,19 +60,19 @@ public class FallingSandPrototype : MonoBehaviour
     private void Update()
     {
         //Update the cells in the array
-        //if (Input.GetKey(KeyCode.Space))
-        //{
-        Cell[,] cells = new Cell[texSize.x, texSize.y];
-        for (int i = 0; i < texSize.x; i++)
+        if (!Input.GetKey(KeyCode.Space))
         {
-            for (int j = 0; j < texSize.y; j++)
+            Cell[,] cells = new Cell[texSize.x, texSize.y];
+            for (int i = 0; i < texSize.x; i++)
             {
-                //cellGrid = cellGrid[i, j].UpdateCell(cellGrid);
-                cellGrid[i, j].UpdateCell(cellGrid);
+                for (int j = 0; j < texSize.y; j++)
+                {
+                    //cellGrid = cellGrid[i, j].UpdateCell(cellGrid);
+                    cellGrid[i, j].UpdateCell(cellGrid);
+                }
             }
-        }
 
-        //}
+        }
 
         // Sprite oldSprite = GetComponent<SpriteRenderer>().sprite;
         // Destroy(oldSprite);
@@ -110,15 +113,46 @@ public class FallingSandPrototype : MonoBehaviour
         }
 
 
+        //change the selected cell type
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            selectedCellType = 0;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            selectedCellType = 1;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            selectedCellType = 2;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            selectedCellType = 3;
+        }
 
         if (Input.GetMouseButton(0))
         {
-            PaintPixelAtMouse(new FallingCell(Color.yellow, CellState.Solid, Vector2Int.zero, ref cellGrid));
+            switch(selectedCellType)
+            {
+                case 0:
+                    PaintPixelAtMouse(new EmptyCell(Color.white, CellState.Empty, Vector2Int.zero));
+                    break;
+                case 1:
+                    PaintPixelAtMouse(new FallingCell(Color.yellow, CellState.Solid, Vector2Int.zero, ref cellGrid));
+                    break;
+                case 2:
+                    PaintPixelAtMouse(new Snad(Color.magenta, CellState.Solid, Vector2Int.zero));
+                    break;
+                case 3:
+                    PaintPixelAtMouse(new Water(Color.blue, CellState.Liquid, Vector2Int.zero));
+                    break;
+                default:
+                    PaintPixelAtMouse(new EmptyCell(Color.white, CellState.Empty, Vector2Int.zero));
+                    break;
+            }
+            // PaintPixelAtMouse(new FallingCell(Color.yellow, CellState.Solid, Vector2Int.zero, ref cellGrid));
             // ChangePixelAtMousePos();
-        }
-        if (Input.GetMouseButton(1))
-        {
-            PaintPixelAtMouse(new EmptyCell(Color.white, CellState.Empty, Vector2Int.zero));
         }
 
 
@@ -195,6 +229,12 @@ public class FallingSandPrototype : MonoBehaviour
                                 case EmptyCell:
                                     cellToPlace = new EmptyCell(cellToPaint.cellProperties.cellColor, cellToPaint.cellProperties.cellState, new Vector2Int(i, j));
                                     break;
+                                case Snad:
+                                    cellToPlace = new Snad(cellToPaint.cellProperties.cellColor, cellToPaint.cellProperties.cellState, new Vector2Int(i, j));
+                                    break;
+                                case Water:
+                                    cellToPlace = new Water(cellToPaint.cellProperties.cellColor, cellToPaint.cellProperties.cellState, new Vector2Int(i, j));
+                                    break;
                                 default:
                                     cellToPlace = new EmptyCell(cellToPaint.cellProperties.cellColor, CellState.Empty, new Vector2Int(i, j));
                                     break;
@@ -223,5 +263,10 @@ public class FallingSandPrototype : MonoBehaviour
         float mappedValue = newMin + (clampedValue - originalMin) * (newMax - newMin) / (originalMax - originalMin);
 
         return mappedValue;
+    }
+
+    void OnGUI() {
+        //display the selected cell type in the top left corner of the screen
+        GUI.Label(new Rect(10, 10, 100, 20), "Selected Cell: " + selectedCellType);
     }
 }

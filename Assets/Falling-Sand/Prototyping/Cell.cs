@@ -73,24 +73,16 @@ public class Cell
 
     public virtual Cell[,] UpdateLiquidCell(Cell[,] grid)
     {
-        return grid;
-    }
+        // Debug.LogError("UpdateLiquidCell not implemented");
 
-    public virtual Cell[,] UpdateGasCell(Cell[,] grid)
-    {
-        return grid;
-    }
-
-    public virtual Cell[,] UpdateSolidCell(Cell[,] grid)
-    {
         // if (!cellProperties.shouldUpdate) return grid;
-        if (cellProperties.updated) return grid;
+        // if (cellProperties.updated) return grid;
         // if (!cellProperties.canCellMove) return grid;
         GetCellNeighbors(grid);
         //if the cell below is empty, move down
         for (int i = 0; i < cellProperties.cellNeighbors.Count; i++)
         {
-            if (cellProperties.cellNeighbors[i].cellProperties.cellPosition.y > cellProperties.cellPosition.y) continue;
+            // if (cellProperties.cellNeighbors[i].cellProperties.cellPosition.y > cellProperties.cellPosition.y) continue;
             if (cellProperties.cellNeighbors[i].cellProperties.cellState == CellState.Empty)
             {
                 Cell oldCell = this;
@@ -124,7 +116,62 @@ public class Cell
                 //    }
                 //    else cellProperties.shouldUpdate = true;
                 //}
-                cellProperties.cellNeighbors.Clear();
+                break;
+            }
+        }
+        cellProperties.updated = true;
+        return grid;
+    }
+
+    public virtual Cell[,] UpdateGasCell(Cell[,] grid)
+    {
+        Debug.LogError("UpdateGasCell not implemented");
+        return grid;
+    }
+
+    public virtual Cell[,] UpdateSolidCell(Cell[,] grid)
+    {
+        // if (!cellProperties.shouldUpdate) return grid;
+        if (cellProperties.updated) return grid;
+        // if (!cellProperties.canCellMove) return grid;
+        GetCellNeighbors(grid);
+        //if the cell below is empty, move down
+        for (int i = 0; i < cellProperties.cellNeighbors.Count; i++)
+        {
+            // if (cellProperties.cellNeighbors[i].cellProperties.cellPosition.y > cellProperties.cellPosition.y) continue;
+            if (cellProperties.cellNeighbors[i].cellProperties.cellState != CellState.Solid)
+            {
+                Cell oldCell = this;
+                Cell oldNeighborCell = cellProperties.cellNeighbors[i];
+
+                Vector2Int oldCellPos = cellProperties.cellPosition;
+                Vector2Int oldNeighborCellPos = cellProperties.cellNeighbors[i].cellProperties.cellPosition;
+
+                //check each of the neighboring cells, if it's empty, move there
+                grid[cellProperties.cellNeighbors[i].cellProperties.cellPosition.x, cellProperties.cellNeighbors[i].cellProperties.cellPosition.y] = this;
+                cellProperties.cellPosition = cellProperties.cellNeighbors[i].cellProperties.cellPosition;
+                // cellProperties.cellColor = Color.yellow;
+
+                oldNeighborCell.cellProperties.cellPosition = oldCellPos;
+                grid[oldCellPos.x, oldCellPos.y] = oldNeighborCell;
+
+                //GetCellNeighbors(grid);
+                //if (cellProperties.cellNeighbors.Count > 0)
+                //{
+                //    int solidNeighborCells = 0;
+                //    foreach (Cell updatedNeighbor in cellProperties.cellNeighbors)
+                //    {
+                //        if (updatedNeighbor.cellProperties.cellState == CellState.Solid)
+                //        {
+                //            solidNeighborCells++;
+                //        }
+                //    }
+                //    if (solidNeighborCells == cellProperties.cellNeighbors.Count)
+                //    {
+                //        cellProperties.shouldUpdate = false;
+                //    }
+                //    else cellProperties.shouldUpdate = true;
+                //}
                 break;
             }
         }
