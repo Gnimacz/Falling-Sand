@@ -16,7 +16,7 @@ public class Water : Cell
         // cellProperties.cellColor = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f), 1f);
     }
 
-    public override Cell[,] UpdateCell(Cell[,] grid)
+    public override Cell[,] UpdateLiquidCell(Cell[,] grid)
     {
         // grid = base.UpdateCell(grid);
         // if (cellProperties.cellPosition.x >= grid.GetLength(0) - 1)

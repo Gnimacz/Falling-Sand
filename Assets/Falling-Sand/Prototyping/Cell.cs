@@ -53,6 +53,8 @@ public class Cell
 
     public virtual Cell[,] UpdateCell(Cell[,] grid)
     {
+        if (cellProperties.updated) return grid;
+
         if (cellProperties.cellState == CellState.Solid)
         {
             return UpdateSolidCell(grid);
@@ -73,7 +75,6 @@ public class Cell
 
     public virtual Cell[,] UpdateLiquidCell(Cell[,] grid)
     {
-        // Debug.LogError("UpdateLiquidCell not implemented");
 
         // if (!cellProperties.shouldUpdate) return grid;
         // if (cellProperties.updated) return grid;
@@ -132,7 +133,6 @@ public class Cell
     public virtual Cell[,] UpdateSolidCell(Cell[,] grid)
     {
         // if (!cellProperties.shouldUpdate) return grid;
-        if (cellProperties.updated) return grid;
         // if (!cellProperties.canCellMove) return grid;
         GetCellNeighbors(grid);
         //if the cell below is empty, move down

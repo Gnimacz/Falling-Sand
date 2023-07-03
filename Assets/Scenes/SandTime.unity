@@ -282,7 +282,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   paintBrushRadius: 10
   texture: {fileID: 0}
-  texSize: {x: 32, y: 32}
+  texSize: {x: 128, y: 128}
   realTexSize: {x: 510, y: 510}
 --- !u!1 &1800891992
 GameObject:

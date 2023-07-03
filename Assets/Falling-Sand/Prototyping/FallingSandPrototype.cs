@@ -73,6 +73,23 @@ public class FallingSandPrototype : MonoBehaviour
             }
 
         }
+        if (Input.GetKey(KeyCode.Space))
+        {
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+
+
+                Cell[,] cells = new Cell[texSize.x, texSize.y];
+                for (int i = 0; i < texSize.x; i++)
+                {
+                    for (int j = 0; j < texSize.y; j++)
+                    {
+                        //cellGrid = cellGrid[i, j].UpdateCell(cellGrid);
+                        cellGrid[i, j].UpdateCell(cellGrid);
+                    }
+                }
+            }
+        }
 
         // Sprite oldSprite = GetComponent<SpriteRenderer>().sprite;
         // Destroy(oldSprite);

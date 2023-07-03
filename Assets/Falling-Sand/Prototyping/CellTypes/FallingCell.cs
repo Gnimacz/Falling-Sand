@@ -12,10 +12,4 @@ public class FallingCell : Cell
         cellProperties.canCellMove = true;
         cellProperties.cellNeighbors = new List<Cell>();
     }
-
-    public override Cell[,] UpdateSolidCell(Cell[,] grid)
-    {
-        Debug.LogWarning(cellProperties.cellPosition);
-        return base.UpdateSolidCell(grid);
-    }
 }
